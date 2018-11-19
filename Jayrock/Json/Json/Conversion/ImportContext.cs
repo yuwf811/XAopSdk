@@ -28,8 +28,10 @@ namespace Jayrock.Json.Conversion
     using System.Collections;
     using System.Configuration;
     using System.Diagnostics;
+    using System.IO;
     using System.Threading;
     using Jayrock.Json.Conversion.Converters;
+    using Microsoft.Extensions.Configuration;
 
     #endregion
 
@@ -172,14 +174,20 @@ namespace Jayrock.Json.Conversion
                     importers.Add(new DictionaryImporter());
                     importers.Add(new ListImporter());
                     
-                    IList typeList = (IList) ConfigurationManager.GetSection("jayrock/json.conversion.importers");
-
-                    if (typeList != null && typeList.Count > 0)
+                    if(File.Exists(Environment.CurrentDirectory + "\\appsettings.json"))
                     {
-                        foreach (Type type in typeList)
-                            importers.Add((IImporter) Activator.CreateInstance(type));
-                    }
+                        var builder = new  ConfigurationBuilder();
+                        builder.AddJsonFile(Environment.CurrentDirectory + "\\appsettings.json");
+                        var configuration = builder.Build();
+                        IList typeList = (IList) configuration.GetSection("jayrock/json.conversion.importers");
 
+                        if (typeList != null && typeList.Count > 0)
+                        {
+                            foreach (Type type in typeList)
+                                importers.Add((IImporter) Activator.CreateInstance(type));
+                        }
+                    }
+                    
                     _stockImporters = importers;
                 }
                 
