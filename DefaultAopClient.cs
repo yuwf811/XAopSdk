@@ -276,7 +276,8 @@ namespace Aop.Api
             }
 
             //验签
-            // CheckResponseSign(request, rsp, parser, this.alipayPublicKey, this.charset);
+            //CheckResponseSign(request, rsp, parser, this.alipayPublicKey, this.charset);
+            //CheckResponseSign(request, body, false, parser, this.alipayPublicKey, this.charset, this.signType);
             return rsp;
         }
         #endregion

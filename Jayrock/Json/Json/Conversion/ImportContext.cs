@@ -175,16 +175,19 @@ namespace Jayrock.Json.Conversion
                     importers.Add(new ListImporter());
                     
                     if(File.Exists(Environment.CurrentDirectory + "\\appsettings.json"))
-                    {
+                     {
                         var builder = new  ConfigurationBuilder();
                         builder.AddJsonFile(Environment.CurrentDirectory + "\\appsettings.json");
                         var configuration = builder.Build();
-                        IList typeList = (IList) configuration.GetSection("jayrock/json.conversion.importers");
-
-                        if (typeList != null && typeList.Count > 0)
+                        var section = configuration.GetSection("jayrock/json.conversion.importers");
+                        if (section.Value != null)
                         {
-                            foreach (Type type in typeList)
-                                importers.Add((IImporter) Activator.CreateInstance(type));
+                            IList typeList = (IList)configuration.GetSection("jayrock/json.conversion.importers");
+                            if (typeList != null && typeList.Count > 0)
+                            {
+                                foreach (Type type in typeList)
+                                    importers.Add((IImporter)Activator.CreateInstance(type));
+                            }
                         }
                     }
                     
