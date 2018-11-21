@@ -160,9 +160,7 @@ namespace Aop.Api
 
         public T Execute<T>(IAopRequest<T> request, string accessToken) where T : AopResponse
         {
-
             return Execute<T>(request, accessToken, null);
-
         }
         #endregion
         #region IAopClient Members
@@ -331,7 +329,6 @@ namespace Aop.Api
                 txtParams.Add(APP_AUTH_TOKEN, appAuthToken);
             }
 
-
             if (request.GetNeedEncrypt())
             {
 
@@ -361,12 +358,8 @@ namespace Aop.Api
             // 添加签名参数
             txtParams.Add(SIGN, AopUtils.SignAopRequest(txtParams, privateKeyPem, charset, this.keyFromFile, signType));
 
-
-
             // 是否需要上传文件
             string body;
-
-
             if (request is IAopUploadRequest<T>)
             {
                 IAopUploadRequest<T> uRequest = (IAopUploadRequest<T>)request;
